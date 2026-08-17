@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Spiritual Tours Landing Page",
   "dependencies": {
-    "@google/generative-ai": "^0.1.1"
+    "@google/generative-ai": "latest"
   }
 }

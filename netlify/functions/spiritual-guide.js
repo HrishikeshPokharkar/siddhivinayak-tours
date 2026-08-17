@@ -59,9 +59,9 @@ exports.handler = async (event, context) => {
       "on itineraries, local transport, budget stays, and cultural/temple etiquette. " +
       "Always maintain a peaceful, welcoming, and respectful tone in your responses.";
 
-    // Use Gemini 1.5 Flash as it is highly efficient and supports system instructions
+    // Using Gemini 3.1 Pro for advanced reasoning and itinerary planning
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-3.1-pro-preview",
       systemInstruction: systemInstruction,
     });
 
