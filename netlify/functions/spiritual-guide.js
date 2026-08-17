@@ -3,7 +3,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 exports.handler = async (event, context) => {
   // CORS Headers - useful if you are calling this from a frontend domain
   const headers = {
-    "Access-Control-Allow-Origin": "*", // Or specify your frontend URL
+    "Access-Control-Allow-Origin": "*", 
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Content-Type": "application/json",
@@ -11,11 +11,7 @@ exports.handler = async (event, context) => {
 
   // Handle preflight OPTIONS request for CORS
   if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers,
-      body: "",
-    };
+    return { statusCode: 200, headers, body: "" };
   }
 
   // Only allow POST requests
@@ -57,12 +53,16 @@ exports.handler = async (event, context) => {
       "You are a calm, helpful, and budget-conscious spiritual travel agent. " +
       "Help users plan spiritual tours and pilgrimages, offering practical advice " +
       "on itineraries, local transport, budget stays, and cultural/temple etiquette. " +
-      "Always maintain a peaceful, welcoming, and respectful tone in your responses.";
+      "Always maintain a peaceful, welcoming, and respectful tone. " +
+      "CRITICAL: Keep your response extremely concise, strictly under 3 short paragraphs.";
 
-    // Using gemini-3.7-flash 
+    // Use Gemini 3.7 Flash with a strict token limit
     const model = genAI.getGenerativeModel({
       model: "gemini-3.7-flash",
       systemInstruction: systemInstruction,
+      generationConfig: {
+        maxOutputTokens: 300, // Forces the AI to stop early, preventing 30-second server timeouts
+      }
     });
 
     // Request content generation from Gemini
