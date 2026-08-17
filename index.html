@@ -434,5 +434,60 @@
 </div>
 </footer>
 
+<script>
+  // 1. The AI fetch function
+  async function getSpiritualAdvice(userText) {
+    try {
+      const response = await fetch('/.netlify/functions/spiritual-guide', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: userText })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        alert("Your Spiritual Guide says:\n\n" + data.reply);
+      } else {
+        alert("Error: " + data.error);
+      }
+    } catch (err) {
+      console.error("Network or parsing error:", err);
+      alert("Could not connect to the spiritual guide. Please check your console.");
+    }
+  }
+
+  // 2. Wire the function to your UI
+  document.addEventListener('DOMContentLoaded', () => {
+    // Find the input and the search button specifically within the form
+    const destinationInput = document.querySelector('input[placeholder*="soul calling"]');
+    const searchButton = destinationInput ? destinationInput.closest('form').querySelector('button') : null; 
+
+    if (searchButton && destinationInput) {
+      searchButton.addEventListener('click', (e) => {
+        e.preventDefault(); // Stop the page from refreshing
+        
+        const destination = destinationInput.value;
+        if (!destination) {
+          alert("Please enter a destination first!");
+          return;
+        }
+
+        // Change button text to show it is thinking
+        const originalText = searchButton.innerHTML;
+        searchButton.innerHTML = `<span class="material-symbols-outlined animate-spin">autorenew</span> Consulting...`;
+
+        // Send the request to your backend
+        getSpiritualAdvice("I am planning a spiritual journey to " + destination + ". What budget-friendly advice can you give me?")
+          .finally(() => {
+            // Reset the button text when done
+            searchButton.innerHTML = originalText;
+          });
+      });
+    }
+  });
+</script>
 
 </body></html>
